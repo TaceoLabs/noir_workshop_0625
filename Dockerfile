@@ -13,6 +13,11 @@ RUN rm -rf co-snarks
 WORKDIR /app
 RUN git clone https://github.com/TaceoLabs/noir_workshop_0625.git && mv noir_workshop_0625/* . && rm Dockerfile && rm noir_workshop_0625 -r
 
+RUN mkdir out/
+RUN mkdir out/secret-shared-inputs/
+RUN mkdir out/merged-inputs/
+RUN mkdir out/proofs/
+
 # install some quality of live (no, seriously they are great)
 RUN cargo install bat
 RUN cargo install just
