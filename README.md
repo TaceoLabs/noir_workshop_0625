@@ -20,12 +20,12 @@ If you'd prefer to install everything manually, follow the instructions from our
 
 By the end of this setup, you should have the following tools installed:
 
-* `co-noir`
+* `coNoir`
 * `Noir` (`nargo`)
 
 ## Shuffling a Deck for two Players
 
-In this example, we'll shuffle a deck of [https://en.wikipedia.org/wiki/German-suited_playing_cards](Doppel-Deutsche) playing cards. To make things easier, we’ve provided a `justfile` that automates all the necessary commands. Since you’ll need to run specific commands on all "MPC-nodes" simultaneously, it can be a bit cumbersome to manage this in Docker. That's why we’ve included the `justfile` — and don't worry, the container already comes with `just` pre-installed to streamline the process.
+In this example, we'll shuffle a deck of [Doppel-Deutsche](https://en.wikipedia.org/wiki/German-suited_playing_cards) playing cards. To make things easier, we’ve provided a `justfile` that automates all the necessary commands. Since you’ll need to run specific commands on all "MPC-nodes" simultaneously, it can be a bit cumbersome to manage this in Docker. That's why we’ve included the `justfile` — and don't worry, the container already comes with `just` pre-installed to streamline the process.
 
 ### Compiling the Circuit
 
