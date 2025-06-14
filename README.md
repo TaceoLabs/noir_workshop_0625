@@ -16,7 +16,7 @@ docker build -t co-snarks . && docker run -it co-snarks
 
 ### Manual Installation
 
-If you'd prefer to install everything manually, follow the instructions from our [GitHub](https://github.com/TaceoLabs/co-snarks). Additionally, you will need to install [Noir](https://noir-lang.org/docs/getting_started/installation/).
+If you'd prefer to install everything manually, follow the instructions from our [GitHub](https://github.com/TaceoLabs/co-snarks). Additionally, you will need to install [Noir](https://noir-lang.org/docs/getting_started/quick_start).
 
 By the end of this setup, you should have the following tools installed:
 
@@ -35,7 +35,7 @@ The first step is to compile the circuit with `nargo`. To do that we `cd` into t
 nargo compile
 ```
 
-If you are familiar with Noir (which I think you are being at Noircon), this command should look familiar. We now have the compiled circuit at `target/schnapsen.json`.
+If you are familiar with Noir (which I think you are being at Noircon), this command should look familiar. We now have the compiled circuit at `target/doppel_deutsche.json`.
 
 ### Secret Sharing the Input
 
@@ -51,10 +51,10 @@ Now split the input (secret-share):
 
 ```bash
 #split input Alice
-co-noir split-input --circuit schnapsen/target/schnapsen.json --input input.alice.toml --protocol REP3 --out-dir out/secret-shared-inputs/
+co-noir split-input --circuit doppel_deutsche/target/doppel_deutsche.json --input input.alice.toml --protocol REP3 --out-dir out/secret-shared-inputs/
 
 #split input Bob
-co-noir split-input --circuit schnapsen/target/schnapsen.json --input input.bob.toml --protocol REP3 --out-dir out/secret-shared-inputs/
+co-noir split-input --circuit doppel_deutsche/target/doppel_deutsche.json --input input.bob.toml --protocol REP3 --out-dir out/secret-shared-inputs/
 ```
 
 or use the `justfile`
@@ -97,13 +97,13 @@ Now that all the MPC nodes have the secret-shared, merged input, the next step i
 
 ```bash
 # start party 0
-co-noir generate-witness --input out/merged-inputs/Prover.toml.0.shared --circuit schnapsen/target/schnapsen.json --protocol REP3 --config configs/party0.toml --out out/witness/witness.gz.0.shared
+co-noir generate-witness --input out/merged-inputs/Prover.toml.0.shared --circuit doppel_deutsche/target/doppel_deutsche.json --protocol REP3 --config configs/party0.toml --out out/witness/witness.gz.0.shared
 
 # start party 1
-co-noir generate-witness --input out/merged-inputs/Prover.toml.1.shared --circuit schnapsen/target/schnapsen.json --protocol REP3 --config configs/party1.toml --out out/witness/witness.gz.1.shared
+co-noir generate-witness --input out/merged-inputs/Prover.toml.1.shared --circuit doppel_deutsche/target/doppel_deutsche.json --protocol REP3 --config configs/party1.toml --out out/witness/witness.gz.1.shared
 
 # start party 2
-co-noir generate-witness --input out/merged-inputs/Prover.toml.2.shared --circuit schnapsen/target/schnapsen.json --protocol REP3 --config configs/party2.toml --out out/witness/witness.gz.2.shared
+co-noir generate-witness --input out/merged-inputs/Prover.toml.2.shared --circuit doppel_deutsche/target/doppel_deutsche.json --protocol REP3 --config configs/party2.toml --out out/witness/witness.gz.2.shared
 ```
 
 or
@@ -116,18 +116,18 @@ This step might take a few seconds (~2 seconds on my machine). Once it’s compl
 
 ### Generating the Proof
 
-Now for the final step — generating the proof! This step will take some time. On my machine it took ~25 seconds. This is single-threaded and not optimized. We will tackle performance over the next couple of weeks, as we focused on being feature complete over performance.
+Now for the final step — generating the proof! This step may take again a couple of seconds. On my machine it took ~5 seconds. This is single-threaded and not optimized. We will tackle performance over the next couple of months, as we focused on being feature complete over performance.
 Anyways, you can do generate the proof by running the following commands on each MPC-node:
 
 ```bash
 # start party 0
-co-noir build-and-generate-proof --witness out/witness/witness.gz.0.shared --circuit schnapsen/target/schnapsen.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party0.toml --out out/proofs/proof.0.dat --public-input out/proofs/public-input.0.dat
+co-noir build-and-generate-proof --witness out/witness/witness.gz.0.shared --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party0.toml --out out/proofs/proof.0.dat --public-input out/proofs/public-input.0.dat
 
 # start party 1
-co-noir build-and-generate-proof --witness out/witness/witness.gz.1.shared --circuit schnapsen/target/schnapsen.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party1.toml --out out/proofs/proof.1.dat --public-input out/proofs/public-input.1.dat
+co-noir build-and-generate-proof --witness out/witness/witness.gz.1.shared --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party1.toml --out out/proofs/proof.1.dat --public-input out/proofs/public-input.1.dat
 
 # start party 2
-co-noir build-and-generate-proof --witness out/witness/witness.gz.2.shared --circuit schnapsen/target/schnapsen.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party2.toml --out out/proofs/proof.2.dat --public-input out/proofs/public-input.2.dat
+co-noir build-and-generate-proof --witness out/witness/witness.gz.2.shared --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party2.toml --out out/proofs/proof.2.dat --public-input out/proofs/public-input.2.dat
 ```
 
 or use the `justfile`
@@ -144,7 +144,7 @@ Congratulations! 🎉 You’ve successfully generated the proof! You can find th
 You can easily verify the proof using the `coNoir` tool. Similar as with barettenberg, you have to create a verification key. You can do this with:
 
 ```bash
-co-noir create-vk --circuit schnapsen/target/schnapsen.json --crs crs/bn254_g1.dat --vk verification_key.dat --hasher keccak
+co-noir create-vk --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --vk verification_key.dat --hasher keccak
 ```
 
 Finally, you can verify the proof:
