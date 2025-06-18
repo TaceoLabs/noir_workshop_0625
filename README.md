@@ -44,7 +44,7 @@ Now, let’s prepare the inputs for the circuit. Since we are simulating two par
 To view the input files, use the following command:
 
 ```bash
-bat input.alice.json
+bat input.alice.toml
 ```
 
 Now split the input (secret-share):
