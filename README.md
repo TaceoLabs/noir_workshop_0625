@@ -29,7 +29,7 @@ In this example, we'll shuffle a deck of [Doppel-Deutsche](https://en.wikipedia.
 
 ### Compiling the Circuit
 
-The first step is to compile the circuit with `nargo`. To do that we `cd` into the `shuffle/` folder and, run:
+The first step is to compile the circuit with `nargo`. To do that we `cd` into the `doppel_deutsche/` folder and, run:
 
 ```bash
 nargo compile
