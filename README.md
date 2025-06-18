@@ -112,7 +112,7 @@ or
 just run-witness-generation
 ```
 
-This step might take a few seconds (~2 seconds on my machine). Once it’s complete, you’ll find the secret-shared witness in the `out/witness` folder.
+This step should be reasonably fast (>1 seconds on my machine). Once it’s complete, you’ll find the secret-shared witness in the `out/witness` folder.
 
 ### Generating the Proof
 
