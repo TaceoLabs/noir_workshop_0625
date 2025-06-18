@@ -39,7 +39,7 @@ If you are familiar with Noir (which I think you are being at Noircon), this com
 
 ### Secret Sharing the Input
 
-Now, let’s prepare the inputs for the circuit. Since we are simulating two parties, we have two input files: `input.alice.json` and `input.bob.json`. They want to play a game with the Doppeldeutsche deck. We go back to our root directory and inspect the inputs from Alice and Bob.
+Now, let’s prepare the inputs for the circuit. Since we are simulating two parties, we have two input files: `input.alice.toml` and `input.bob.toml`. They want to play a game with the Doppeldeutsche deck. We go back to our root directory and inspect the inputs from Alice and Bob.
 
 To view the input files, use the following command:
 
