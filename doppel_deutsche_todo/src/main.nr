@@ -11,57 +11,75 @@ pub(crate) struct DoppelDeutscheCards {
 }
 
 impl DoppelDeutscheCards {
+    // In a real application, commitments should also have randomness
+    fn commit(self) -> Field {
+        let mut current_hash = 0;
+        for i in 0..16 {
+            let mut poseidon_input =
+                [current_hash, self.deck[i * 2] as Field, self.deck[i * 2 + 1] as Field, 0];
+            current_hash = std::hash::poseidon2_permutation(poseidon_input, 4)[0];
+        }
+        current_hash
+    }
 
     pub(crate) fn shuffle(player1: Field, player2: Field) -> Self {
         Self { deck: shuffle::shuffle(UNSHUFFLED_DECK, [player1, player2]) }
     }
 }
 
-// TODO main function - commit to inputs and shuffle the deck
-fn main() -> pub DoppelDeutscheCards {}
+// In a real application, commitments should also have randomness
+fn commit(input: Field) -> Field {
+    std::hash::poseidon2_permutation([input, 0, 0, 0], 4)[0]
+}
+
+// TODO main function - verify commitments to inputs and shuffle the deck
+fn main_inner() -> DoppelDeutscheCards {}
+
+// TODO call the main_inner function but only return the commitment to the shuffled deck
+fn main() -> pub Field {}
 
 #[test]
 pub fn test_deterministic() {
-    let deck1 = main(
+    let deck1 = main_inner(
         1,
         2,
-        0x03542cb720369f19a74fd05b4edfbedb27a78514ad3283f1b3270a1656cced8e,
-        0x1efa9d6bb4dfdf86063cc77efdec90eb9262079230f1898049efad264835b6c8,
+        0x02a04ea402711ced2d4bc39608cc5350a7db4af98ec2950d4d1ec30334d6c2b4,
+        0x01fc64bed90c55b193ec54e851cd13888d45293f2a2e4efdf83581f39df9c615,
     );
-    let deck2 = main(
+    let deck2 = main_inner(
         1,
         2,
-        0x03542cb720369f19a74fd05b4edfbedb27a78514ad3283f1b3270a1656cced8e,
-        0x1efa9d6bb4dfdf86063cc77efdec90eb9262079230f1898049efad264835b6c8,
+        0x02a04ea402711ced2d4bc39608cc5350a7db4af98ec2950d4d1ec30334d6c2b4,
+        0x01fc64bed90c55b193ec54e851cd13888d45293f2a2e4efdf83581f39df9c615,
     );
     assert(deck1 == deck2);
 }
 
 #[test]
 pub fn test_random() {
-    let deck1 = main(
+    let deck1 = main_inner(
         1,
         2,
-        0x03542cb720369f19a74fd05b4edfbedb27a78514ad3283f1b3270a1656cced8e,
-        0x1efa9d6bb4dfdf86063cc77efdec90eb9262079230f1898049efad264835b6c8,
+        0x02a04ea402711ced2d4bc39608cc5350a7db4af98ec2950d4d1ec30334d6c2b4,
+        0x01fc64bed90c55b193ec54e851cd13888d45293f2a2e4efdf83581f39df9c615,
     );
-    let deck2 = main(
+    let deck2 = main_inner(
         1,
         3,
-        0x03542cb720369f19a74fd05b4edfbedb27a78514ad3283f1b3270a1656cced8e,
-        0x24013340c052ebf847e0d7081f84e6a8e92f54e2e1726a1e559ac46a8f242007,
+        0x02a04ea402711ced2d4bc39608cc5350a7db4af98ec2950d4d1ec30334d6c2b4,
+        0x242625e88b1aae5923a32b65ae620a8fd0830822031e994d6c241f06eb899c69,
     );
-    let deck3 = main(
+    let deck3 = main_inner(
         2,
         3,
-        0x1efa9d6bb4dfdf86063cc77efdec90eb9262079230f1898049efad264835b6c8,
-        0x24013340c052ebf847e0d7081f84e6a8e92f54e2e1726a1e559ac46a8f242007,
+        0x01fc64bed90c55b193ec54e851cd13888d45293f2a2e4efdf83581f39df9c615,
+        0x242625e88b1aae5923a32b65ae620a8fd0830822031e994d6c241f06eb899c69,
     );
-    let deck4 = main(
+    let deck4 = main_inner(
         30,
         3,
-        0x27619099f440bf0989b7220bd41ef216bdceb367238441638486a431bda01d28,
-        0x24013340c052ebf847e0d7081f84e6a8e92f54e2e1726a1e559ac46a8f242007,
+        0x08bfd7e317fffab495cb2381fec38d7239b328290787aee42eb0c9dd264930ef,
+        0x242625e88b1aae5923a32b65ae620a8fd0830822031e994d6c241f06eb899c69,
     );
     assert(deck1 != deck2);
     assert(deck1 != deck3);

@@ -17,8 +17,14 @@ run-witness-generation:
 
 # runs the proof generation on three nodes
 run-prove:
-	co-noir build-and-generate-proof --witness out/witness/witness.gz.0.shared --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party0.toml --out out/proofs/proof.0.dat --public-input out/proofs/public-input.0.dat & 
-	RUST_LOG="error" co-noir build-and-generate-proof --witness out/witness/witness.gz.1.shared --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party1.toml --out out/proofs/proof.1.dat --public-input out/proofs/public-input.1.dat & 
+	co-noir build-and-generate-proof --witness out/witness/witness.gz.0.shared --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party0.toml --out out/proofs/proof.0.dat --public-input out/proofs/public-input.0.dat &
+	RUST_LOG="error" co-noir build-and-generate-proof --witness out/witness/witness.gz.1.shared --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party1.toml --out out/proofs/proof.1.dat --public-input out/proofs/public-input.1.dat &
 	RUST_LOG="error" co-noir build-and-generate-proof --witness out/witness/witness.gz.2.shared --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --protocol REP3 --hasher keccak --config configs/party2.toml --out out/proofs/proof.2.dat --public-input out/proofs/public-input.2.dat
 
+# runs the verification key generation
+generate-vkey:
+    co-noir create-vk --circuit doppel_deutsche/target/doppel_deutsche.json --crs crs/bn254_g1.dat --vk verification_key.dat --hasher keccak
 
+# runs the verification key generation
+run-verify:
+    co-noir verify --proof out/proofs/proof.0.dat --public-input out/proofs/public-input.0.dat --vk verification_key.dat --hasher keccak --crs crs/bn254_g2.dat

@@ -1,5 +1,3 @@
-use dep::poseidon2;
-
 mod detail;
 
 pub(crate) struct ShuffleRandomness {
@@ -9,7 +7,10 @@ pub(crate) struct ShuffleRandomness {
 
 impl ShuffleRandomness {
     fn new(player1: Field, player2: Field) -> Self {
-        Self { coins: poseidon2::bn254::hash_2([player1, player2]).to_le_bits(), counter: 0 }
+        Self {
+            coins: std::hash::poseidon2_permutation([player1, player2, 0, 0], 4)[0].to_le_bits(),
+            counter: 0,
+        }
     }
 
     fn coin(self: &mut Self) -> bool {
